@@ -837,12 +837,13 @@ var PriceRange = function () {
 
         $( "#slider-range-min" ).slider({
             range: "min",
-            value: 15000000,
-            min: 100000,
+            value: 10000000,
+            min: 0,
             max: 20000000,
             slide: function( event, ui ) {
-                $( "#amount" ).val( ui.value );
-                $( "#amount-label" ).text( numeral(ui.value).format('0,0')+ 'đ' );
+                //$("#amount").val(ui.value);
+                $("#amount").text(ui.value);
+                $("#amount-label").text( numeral(ui.value).format('0,0')+ 'đ' );
             }
         });
         // numeral(1000).format('0,0')

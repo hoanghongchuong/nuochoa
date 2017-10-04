@@ -18,6 +18,11 @@ class ThuongHieuController extends Controller
     public function postCreate(Request $req){
         $thuonghieu = new ThuongHieu;
         $thuonghieu->name = $req->txtName;
+        if($request->txtAlias){
+            $thuonghieu->alias = $request->txtAlias;
+        }else{
+            $thuonghieu->alias = changeTitle($request->txtName);
+        }
         $thuonghieu->save();
         return redirect(route('admin.thuonghieu.index'));
     }
@@ -26,9 +31,14 @@ class ThuongHieuController extends Controller
     	$data = ThuongHieu::where('id',$id)->first();
     	return view('admin.thuonghieu.edit',compact('data'));
     }
-    public function postEdit(Request $req, $id){
+    public function postEdit(Request $request, $id){
         $data = ThuongHieu::where('id',$id)->first();
-        $data->name = $req->txtName;
+        $data->name = $request->txtName;
+        if($request->txtAlias){
+                $data->alias = $request->txtAlias;
+            }else{
+                $data->alias = changeTitle($request->txtName);
+            }
         $data->save();
         return redirect(route('admin.thuonghieu.index'));
     }

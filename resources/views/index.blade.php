@@ -46,6 +46,7 @@
     <link href="{{asset('public/css/style.css')}}" rel="stylesheet" />
 
     <link href="{{asset('public/css/customize.css')}}" rel="stylesheet" />
+     <script src="{{ asset('public/plugin/plugin.min.js') }}"></script>
     
 </head>
 <body>
@@ -64,7 +65,7 @@
     
    
     <!-- BEGIN: SCRIPT -->
-    <script src="{{ asset('public/plugin/plugin.min.js') }}"></script>
+   
     <script src="{{ asset('public/plugin/main.js') }}"></script>
     <script src="{{ asset('public/plugin/custom.js') }}"></script>
     <!-- END: SCRIPT -->

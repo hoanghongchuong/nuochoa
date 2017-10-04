@@ -10,19 +10,21 @@
             <div class="vk-header__mid-content">
                 <div class="vk-header__logo vk-img vk-img--mw100">
                     <a href="{{url('')}}" title="Han nats">
-                        <img src="{{asset('public/images/logo/logo-1.png')}}" alt="nats">
+                        <img src="{!! asset('upload/hinhanh/'.$setting->photo) !!}" alt="nats">
                     </a>
                 </div> <!-- ./vk-header__logo-->
                 <div class="vk-header__mid-right">
                     <div class="vk-header__search">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Tìm kiếm">
-                            <span class="input-group-btn">
-                                <button class="vk-btn vk-btn--search vk-btn--mod-1" type="button">
-                                    <i class="_icon fa fa-search"></i>
-                                </button>
-                            </span>
-                        </div>
+                        <form class="" method="get" action="{{route('search')}}">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="txtSearch" required="required" placeholder="Tìm kiếm">
+                                <span class="input-group-btn">
+                                    <button class="vk-btn vk-btn--search vk-btn--mod-1" type="submit">
+                                        <i class="_icon fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
                     </div>  <!--./vk-header__search-->
 
                     <div class="vk-header__shopcart">

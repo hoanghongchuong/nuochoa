@@ -25,9 +25,10 @@ Route::get('cam-nang/{id}.html',['as'=>'getNewsDetail', 'uses'=>'IndexController
 Route::get('san-pham',['as'=>'getProduct', 'uses'=>'IndexController@getProduct']);
 Route::get('san-pham/{alias}.html','IndexController@getProductDetail')->name('detailProduct');
 Route::get('san-pham/{id}',['as'=>'getProductList', 'uses'=>'IndexController@getProductList']);
+Route::get('thuong-hieu/{alias}','IndexController@getProductByThuongHieu');
 
 Route::get('ajax/province/{id}',['as'=>'loadDistrictByProvince', 'uses'=>'IndexController@loadDistrictByProvince']);
-
+Route::get('sap-xep','IndexController@SapXep')->name('sapxep');
 
 
 // gio hang
@@ -37,6 +38,7 @@ Route::post('cart/update',['as' => 'updateCart', 'uses' => 'IndexController@upda
 // Route::get('updatecart/{id}/{qty}',['as'=>'updatecart','uses'=>'IndexController@updatecart']);
 Route::get('xoa-gio-hang/{id}','IndexController@deleteCart');
 Route::post('gui-don-hang', ['as' =>'postOrder', 'uses'=> 'IndexController@postOrder']);
+Route::get('xoa-all','IndexController@deleteAllCart')->name('deleteCart');
 
 Route::get('dich-vu',['as'=>'getDichvu', 'uses'=>'IndexController@getDichvu']);
 

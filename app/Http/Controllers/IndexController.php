@@ -57,8 +57,7 @@ class IndexController extends Controller {
 		$hot_news = DB::table('news')->where('status',1)->where('noibat',1)->orderBy('created_at','desc')->first();
 		// dd($hot_news);
 		$news_product = DB::table('products')->select()->where('status',1)->orderBy('id','desc')->limit(8)->get();
-		$hot_product  = DB::table('products')->where('status',1)->where('noibat',1)->orderBy('created_at','desc')->limit(10)->get();
-	
+		$hot_product  = DB::table('products')->where('status',1)->where('noibat',1)->orderBy('created_at','desc')->limit(8)->get();
 		$about = DB::table('about')->first();
 		// Cấu hình SEO
 		$setting = Cache::get('setting');
@@ -102,7 +101,6 @@ class IndexController extends Controller {
 			$banner_danhmuc = DB::table('lienket')->select()->where('status',1)->where('com','chuyen-muc')->where('link','san-pham')->get()->first();
 			$doitac = DB::table('lienket')->select()->where('status',1)->where('com','doi-tac')->orderby('stt','asc')->get();
 			$setting = Cache::get('setting');
-
 			if(!empty($product_cate->title)){
 				$title = $product_cate->title;
 			}else{
@@ -123,12 +121,12 @@ class IndexController extends Controller {
 	{
         //Tìm article thông qua mã id tương ứng
 		$product_detail = DB::table('products')->select()->where('status',1)->where('alias',$id)->get()->first();
-		
-
 		if(!empty($product_detail)){
 			$banner_danhmuc = DB::table('lienket')->select()->where('status',1)->where('com','chuyen-muc')->where('link','san-pham')->get()->first();
-			$product_khac = DB::table('products')->select()->where('status',1)->where('alias','<>',$id)->orderby('stt','desc')->take(8)->get();
+			// $product_khac = DB::table('products')->select()->where('status',1)->where('alias','<>',$id)->orderby('stt','desc')->take(8)->get();
 			$album_hinh = DB::table('images')->select()->where('product_id',$product_detail->id)->orderby('id','asc')->get();
+			$cateProduct = DB::table('product_categories')->select('name','alias')->where('id',$product_detail->cate_id)->first();
+			$productSameCate = DB::table('products')->select()->where('status',1)->where('alias','<>',$id)->where('cate_id',$product_detail->cate_id)->orderby('stt','desc')->get();
 			$setting = Cache::get('setting');
 			// Cấu hình SEO
 			if(!empty($product_detail->title)){
@@ -141,7 +139,7 @@ class IndexController extends Controller {
 			$img_share = asset('upload/product/'.$product_detail->photo);
 
 			// End cấu hình SEO
-			return view('templates.product_detail_tpl', compact('product_detail','banner_danhmuc','keyword','description','title','img_share','product_khac','album_hinh'));
+			return view('templates.product_detail_tpl', compact('product_detail','banner_danhmuc','keyword','description','title','img_share','product_khac','album_hinh','cateProduct','productSameCate'));
 		}else{
 			return redirect()->route('getErrorNotFount');
 		}
@@ -170,6 +168,8 @@ class IndexController extends Controller {
 	public function search(Request $request)
 	{
 		$search = $request->txtSearch;
+		$cate_pro = DB::table('product_categories')->where('status',1)->orderby('id','asc')->get();
+		$thuonghieus = DB::table('thuonghieu')->get();
 		// Cấu hình SEO
 		$title = "Tìm kiếm: ".$search;
 		$keyword = "Tìm kiếm: ".$search;
@@ -179,7 +179,7 @@ class IndexController extends Controller {
 		
 		$product = DB::table('products')->select()->where('name', 'LIKE', '%' . $search . '%')->orderBy('id','DESC')->get();
 		// dd($product);
-		return view('templates.search_tpl', compact('product','banner_danhmuc','keyword','description','title','img_share','search'));
+		return view('templates.search_tpl', compact('product','banner_danhmuc','keyword','description','title','img_share','search','cate_pro','thuonghieus'));
 	}
 
 	public function getNews()
@@ -467,7 +467,7 @@ class IndexController extends Controller {
 		// dd($product_cart);
 		$bank = DB::table('bank_account')->get();
 		$total = $this->getTotalPrice();
-		// $province = DB::table('province')->get();
+		$province = DB::table('province')->get();
 		// $district = DB::table('district')->get();
 		$product_noibat = DB::table('products')->select()->where('status',1)->where('noibat','>',0)->orderBy('created_at','desc')->take(8)->get();
 		$setting = Cache::get('setting');
@@ -557,6 +557,7 @@ class IndexController extends Controller {
     	$bill->full_name = $req->full_name;
     	$bill->email = $req->email;
     	$bill->phone = $req->phone;
+    	$bill->note = $req->note;
     	$bill->address = $req->address;
     	$bill->payment = (int)($req->payment_method);
     	// $bill->province = $req->province;
@@ -564,15 +565,15 @@ class IndexController extends Controller {
     	$total = $this->getTotalPrice();
     	$bill->total = $total;
     	// $order['price'] = $this->getTotalPrice();
-    	if ($req->card_code) {
-    		$price = $this->checkCard($req);
-	    	if (!$price) {
-	    		return redirect()->back()->with('Mã giảm giá không đúng');
-	    	}
-	    	$bill->card_code = $req->card_code;
-	    	$tongtien = $this->checkCard($req);
-	    	$bill->total = ((Int)str_replace(',', '', $tongtien)); 	
-    	}
+    	// if ($req->card_code) {
+    	// 	$price = $this->checkCard($req);
+	    // 	if (!$price) {
+	    // 		return redirect()->back()->with('Mã giảm giá không đúng');
+	    // 	}
+	    // 	$bill->card_code = $req->card_code;
+	    // 	$tongtien = $this->checkCard($req);
+	    // 	$bill->total = ((Int)str_replace(',', '', $tongtien)); 	
+    	// }
     	$detail = [];
     	    	
     	foreach ($cart as $key) {
@@ -597,6 +598,10 @@ class IndexController extends Controller {
 			</script>";
     }
 
+    public function deleteAllCart(){
+    	Cart::destroy();
+    	return redirect()->back()->with('mess','Đã xóa giỏ hàng');
+    }
 
     public function loadDistrictByProvince($id){
     	$district = District::where('province_id',$id)->get();
@@ -604,6 +609,24 @@ class IndexController extends Controller {
     	foreach($district as $item){
     		echo "<option value='".$item->id."'>".$item->district_name."</option>";
     	}
+    }
+    public function getProductByThuongHieu($alias){
+    	$cate_pro = DB::table('product_categories')->where('status',1)->orderby('id','asc')->get();
+    	$thuonghieus = DB::table('thuonghieu')->get();
+    	$thuonghieu = DB::table('thuonghieu')->select()->where('alias',$alias)->get()->first();
+    	$products = DB::table('products')->where('thuonghieu_id',$thuonghieu->id)->paginate(12);
+    	return view('templates.thuonghieu_tpl', compact('products','cate_pro','thuonghieus','thuonghieu'));
+    }
+    public function SapXep(Request $request){
+    	$sorts = $request->sort;
+    	$cateProduct = $request->cate;
+    	$result = DB::table('products')
+    			->join('product_categories','products.cate_id','=','product_categories.id')
+    			->select('products.id', 'products.name as productName','products.alias as productAlias','products.photo as productPhoto','products.price as productPrice')
+    			->where('products.cate_id',$cateProduct)
+    			->orderBy('products.id',$sorts)
+    			->get();
+    	return $result;
     }
 
 }

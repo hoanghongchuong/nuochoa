@@ -25,9 +25,27 @@
             <input type="hidden" name="_token" value="{!! csrf_token() !!}" />           
             <div class="clearfix"></div>
             <div class="col-md-6">
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label for="">Tên</label>
                 <input type="text" name="txtName" class="form-control" value="">
+              </div>
+              <div class="form-group">
+                <label for="">Đường dẫn tĩnh</label>
+                <input type="text" name="txtName" class="form-control" value="">
+              </div> -->
+              <div class="form-group @if ($errors->first('txtName')!='') has-error @endif">
+                    <label for="ten">Tên</label>
+                    <input type="text" id="txtName" name="txtName" value=""  class="form-control" />
+                    @if ($errors->first('txtName')!='')
+                    <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {!! $errors->first('txtName'); !!}</label>
+                    @endif
+              </div>
+              <div class="form-group @if ($errors->first('txtAlias')!='') has-error @endif">
+                    <label for="alias">Đường dẫn tĩnh</label>
+                    <input type="text" name="txtAlias" id="txtAlias" value=""  class="form-control" />
+                    @if ($errors->first('txtAlias')!='')
+                    <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> {!! $errors->first('txtAlias'); !!}</label>
+                    @endif
               </div>
             </div>
           <div class="clearfix"></div>

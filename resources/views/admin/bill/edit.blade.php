@@ -56,6 +56,12 @@
 								</div>
 								<div class="col-md-6 col-xs-12">
 									<div class="form-group">
+										<label for="">Ghi chú</label>
+										<div class="">
+											<textarea name="" id="" cols="100" rows="5">{{$data->note}}</textarea>
+										</div>
+									</div>
+									<div class="form-group">
 								      	<label for="txtAddress">Phương thức thanh toán</label>
 								      	<input type="text"  disabled value="<?php 
 								      		if($data->payment ==0)  echo "Thanh toán khi giao hàng";  
