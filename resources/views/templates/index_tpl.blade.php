@@ -194,7 +194,7 @@ $cateProducts = Cache::get('cateProducts');
                     <div class="vk-sidebar">
                         <div class="vk-ads">
                             <div class="vk-img vk-img--mw100">
-                                <img src="{{asset('public/images/ads/ads-1.jpg')}}" alt="">
+                                <img src="{{asset('upload/banner/'.$banner_sidebar[0]->image)}}" alt="">
                             </div>
                         </div>
 
@@ -213,7 +213,8 @@ $cateProducts = Cache::get('cateProducts');
             <div class="container">
                 <div class="vk-banner__content">
                     <div class="vk-img vk-img--cover">
-                        <img src= "{{asset('public/images/banner/banner-2.jpg')}}" alt="">
+                        <?php $qc = DB::table('banner_content')->where('position',1)->first(); ?>
+                        <img src= "{{asset('upload/banner/'.$qc->image)}}" alt="">
                     </div>
                 </div> <!--./vk-banner__content-->
             </div> <!--./container-->
@@ -376,7 +377,7 @@ $cateProducts = Cache::get('cateProducts');
                     <div class="vk-sidebar">
                         <div class="vk-ads">
                             <div class="vk-img vk-img--mw100">
-                                <img src="{{asset('public/images/ads/ads-2.jpg')}}" alt="">
+                                <img src="{{asset('upload/banner/'.$banner_sidebar[1]->image)}}" alt="">
                             </div>
                         </div>
 

@@ -1,52 +1,13 @@
 @extends('index')
 @section('content')
 
-<!-- <section class="banner">
-    <div class="container-flush">
-        <img src="{{asset('public/images/2_03.png')}}" alt="" title="" class="img" />
-    </div>
-    <div class="container">
-        <ul class="breadcumb">
-            <li><a href="index.html" title="{{url('')}}">Trang chủ</a></li>
-            <li><a href="news.html" title="{{url('tin-tuc')}}">Tin tức</a></li>
-            <li><a href="{{url('tin-tuc/'.$news_detail->alias.'.html')}}" title="">{{$news_detail->name}}</a></li>
-        </ul>
-    </div>
-</section>
-
-<section class="ndetail">
-    <div class="container ndetail-content">
-        <h1 class="ndetail-tit"><a href="news-detail.html" title="">{{$news_detail->name}}</a></h1>
-        <div class="like-facbook"></div>
-        {!! $news_detail->content !!}
-    </div>
-</section>
-
-<section class="ndetail-re">
-    <h2 class="text-uppercase text-center ndetail-re-tit"><span><strong>Tin tức khác</strong></span></h2>
-    <div class="ndetail-re-wrap">
-        <div class="container">
-            <div class="owl-carousel owl-theme carousel_hot carousel-ndetail">
-                @foreach($baiviet_khac as $item)
-                <div class="text-center item carousel_hot-item">
-                    <a href="{{url('tin-tuc/'.$item->alias.'.html')}}" title=""><img src="{{asset('upload/news/'.$item->photo)}}" alt="" title=""></a>
-                    <div class="text-center carousel_content">
-                        <h3 class=" pro-name"><a href="{{url('tin-tuc/'.$item->alias.'.html')}}" title=""><strong>{{$item->name}}</strong></a></h3>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-    
-</section> -->
 <section class="vk-content">
     <div class="vk-breadcrumb">
         <nav class="container">
             <ul class="vk-list vk-list--inline vk-list__breadcrumb">
                 <li class="vk-list__item"><a href="{{url('')}}">Trang chủ</a></li>
 
-                <li class="vk-list__item"> <a href={{url('cam-nang')}}">Cẩm nang</a></li>
+                <li class="vk-list__item"> <a href="{{url('cam-nang')}}">Cẩm nang</a></li>
                 <li class="vk-list__item">{{$news_detail->name}}</li>
             </ul>
         </nav>
@@ -57,7 +18,8 @@
         <div class="container">
             <div class="vk-banner__content">
                 <div class="vk-img vk-img--cover">
-                    <img src= "{{asset('public/images/banner/banner-1.jpg')}}" alt="">
+                    <?php $qc = DB::table('banner_content')->where('position',4)->first(); ?>
+                        <img src= "{{asset('upload/banner/'.$qc->image)}}" alt="">
                 </div>
             </div> <!--./vk-banner__content-->
         </div> <!--./container-->

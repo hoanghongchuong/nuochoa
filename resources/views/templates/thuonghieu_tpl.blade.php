@@ -32,15 +32,14 @@
                         <div class="vk-shop__left">
                             <div class="vk-shop__left-inner">
                                 <div class="vk-shop__heading-box">
-                                    <h1 class="vk-shop__heading text-uppercase">{{$thuonghieu->name}}</h1>
-                                    <div class="vk-shop__sort">
+                                    <h1 class="vk-shop__heading text-uppercase">Thương hiệu: {{$thuonghieu->name}}</h1>
+                                    <!-- <div class="vk-shop__sort">
                                         <label for="" class="vk-shop__sort-label">Sắp xếp theo</label>
                                         <select name="" id="" class="form-control">
                                             <option value="">Mới đến cữ</option>
                                             <option value="">Cũ đến mới</option>
                                         </select>
-                                        <!-- /# -->
-                                    </div>
+                                    </div> -->
                                 </div>  <!--./vk-shop__heading-box-->
 
                                 <div class="row vk-shop-item__list">
@@ -194,7 +193,7 @@
                                         <li class="vk-list__item"><a href="{{url('san-pham/'.$catePro->alias)}}" title="">{{$catePro->name}}</a></li>
                                         @endforeach
                                 </div> <!--./vk-sidebar__box-->
-                                <div class="vk-sidebar__box">
+                                <!-- <div class="vk-sidebar__box">
                                     <h3 class="vk-sidebar__heading text-uppercase">Giá</h3>
                                     <div id="slider-range-min"></div>
 
@@ -203,7 +202,7 @@
                                     <input type="text" id="amount" hidden >
 
 
-                                </div> <!--./vk-sidebar__box-->
+                                </div> -->
 
                                 <div class="vk-sidebar__box">
                                     <h3 class="vk-sidebar__heading text-uppercase">Thương hiệu</h3>

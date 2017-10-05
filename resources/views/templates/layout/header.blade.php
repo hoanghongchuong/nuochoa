@@ -48,7 +48,7 @@
                 <ul class="vk-list vk-list--inline vk-menu__main">
                     <li class="vk-list__item"><a href="{{url('')}}" title="">Trang chủ</a></li>
                     <li class="vk-list__item">
-                        <a href="javascript:;" title="">Danh mục sản phẩm</a>
+                        <a href="#" title="">Danh mục sản phẩm</a>
                         <ul class="vk-list vk-menu__child">
                             @foreach($cateProducts as $cateProduct)
                             <li class="vk-list__item"><a href="{{url('san-pham/'.$cateProduct->alias)}}" title="">{{$cateProduct->name}}</a></li>

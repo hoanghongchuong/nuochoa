@@ -781,9 +781,7 @@ var ScrollToTop = function () {
             scrollText: '<i class="fa fa-angle-up"></i>',
             scrollSpeed: 500,
             zIndex: 1,
-
         });
-
         $('[data-scroll-to^="#"]').on('click', function (event) {
 
             var target = $(this.getAttribute('data-scroll-to'));
@@ -791,12 +789,8 @@ var ScrollToTop = function () {
                 event.preventDefault();
                 $('html, body').stop().animate({
                     scrollTop: target.offset().top
-
                 }, 1000);
-
-
             }
-
         });
 
         // var obj = $('[data-scroll-to]');
@@ -831,29 +825,81 @@ var ScrollToTop = function () {
     };
 }();
 
+var timers = {};
+function delayShowData(type, value) {
+    clearTimeout(timers[type]);
+    timers[type] = setTimeout(function() {
+        dataFiltered.price = value;
+        filterProduct(dataFiltered);
+    }, 500);
+}
+
+function filterProduct(data) {
+    $.ajax({
+        type: 'GET',
+        url:  window.urlSapXep,
+        data: data,
+        success: function(response){
+            var html = '';
+            $('.paginations').html(response.paginator);
+            $('.paginations ul li a').attr('href', '#');
+            for (var i = 0; i < response.data.length; i++) {
+                var item = response.data[i];
+                html += '<div class="col-sm-6 col-md-4 col-lg-3 _item">'
+                html +=                '<div class="vk-shop-item__wrapper">'
+                html +=                    '<div class="vk-shop-item">'
+                html +=                        '<div class="vk-img vk-img--mw100">'
+                html +=                            '<a href="' + baseUrl + '/san-pham/' + item.productAlias + '.html" class="vk-img__link">'
+                html +=                                '<img src="' + baseUrl + '/upload/product/' + item.productPhoto + '" alt="'+ item.productName +'" class="vk-img__img">'
+                html +=                            '</a>'
+                html +=                        '</div>'
+
+                html +=                        '<div class="vk-shop-item__brief">'
+                html +=                            '<h3 class="vk-shop-item__title"><a href="' + baseUrl + '/san-pham/' + item.productAlias + '.html" title="'+ item.productName +'">' + item.productName + '</a></h3>'
+                html +=                            '<p class="vk-shop-item__price vk-text--red-1">' + item.productPrice.number_format() + ' đ</p>'
+                html +=                        '</div>'
+                html +=                    '</div> '
+                html +=                '</div>'
+                html +=            '</div>';
+            }
+            $('#append').html(html);
+        }
+    });
+}
+
+$('.paginations').on('click', 'ul li', function(e) {
+    e.preventDefault();
+    var page = $(this).find('a').html();
+    if (page) {
+        dataFiltered.page = page;
+        filterProduct(dataFiltered);
+    }
+})
+
 // price range
 var PriceRange = function () {
     var _initInstances = function () {
-
         $( "#slider-range-min" ).slider({
             range: "min",
-            value: 10000000,
+            value: 0,
             min: 0,
             max: 20000000,
             slide: function( event, ui ) {
                 //$("#amount").val(ui.value);
-                $("#amount").text(ui.value);
+                $("#amount").val(ui.value);
                 $("#amount-label").text( numeral(ui.value).format('0,0')+ 'đ' );
+                delayShowData('height', ui.value);             
             }
         });
+        // setInterval(function() {
+        //     console.log(object);
+        // }, 5000)
         // numeral(1000).format('0,0')
         if($( "#slider-range-min" ).length){
-            var result = $( "#slider-range-min" ).slider( "value" );
-            $( "#amount" ).val(  result );
-
-            $( "#amount-label" ).text( numeral(result).format('0,0') + 'đ' );
+            var result = $( "#slider-range-min" ).slider("value");
+            $( "#amount" ).val(result );
+            $( "#amount-label" ).text(numeral(result).format('0,0') + 'đ');
         }
-
     };
 
     return {
@@ -862,6 +908,18 @@ var PriceRange = function () {
         }
     };
 }();
+
+
+function checkTimeOut() {
+    var time
+}
+
+// search ajax theo gia
+    $('#amount').on('change', function(){
+        alert(1);
+        // var gia = $('#amount').val();
+        // alert(parseInt(gia));
+    });
 
 // calculator quantity
 var CalcQuantity = function () {

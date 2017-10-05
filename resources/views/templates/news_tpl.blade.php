@@ -17,7 +17,8 @@
         <div class="container">
             <div class="vk-banner__content">
                 <div class="vk-img vk-img--cover">
-                    <img src= "{{asset('public/images/banner/banner-1.jpg')}}" alt="">
+                   <?php $qc = DB::table('banner_content')->where('position',2)->first(); ?>
+                        <img src= "{{asset('upload/banner/'.$qc->image)}}" alt="">
                 </div>
             </div> <!--./vk-banner__content-->
         </div> <!--./container-->

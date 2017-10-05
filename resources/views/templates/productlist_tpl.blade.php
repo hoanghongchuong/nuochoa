@@ -19,7 +19,8 @@
             <div class="container">
                 <div class="vk-banner__content">
                     <div class="vk-img vk-img--cover">
-                        <img src= "{{asset('public/images/banner/banner-1.jpg')}}" alt="">
+                        <?php $qc = DB::table('banner_content')->where('position',3)->first(); ?>
+                        <img src= "{{asset('upload/banner/'.$qc->image)}}" alt="">
                     </div>
                 </div> <!--./vk-banner__content-->
             </div> <!--./container-->
@@ -192,7 +193,7 @@
                                     <div id="slider-range-min" onchange=""></div>
 
                                     <p id="amount-label" class="vk-text--yellow-1 text-center mb-0"></p>
-                                    <div id="amount" class="hidden" style="display: none"></div>
+                                    <div><input type="hidden" id="amount"></div>
                                     <!-- <input type="text" id="amount" hidden value="0" > -->
 
 
@@ -225,7 +226,6 @@
 </script>
 
 <script>
-
 Number.prototype.number_format = function(symbol, length) {
     var v = this.valueOf()
     if (!length) length = 3
@@ -247,40 +247,15 @@ Number.prototype.number_format = function(symbol, length) {
 }
      
     var baseUrl = '{{url("/")}}';
+    var dataFiltered = {};
     $(document).ready(function () {
         $('#sapxep').on('change', function(){
-            $.ajax({
-                type: 'GET',
-                url:  window.urlSapXep,
-                data: {
-                    sort: $(this).val(),
-                    cate: {{$product_cate->id}}
-                },
-                success: function(response){
-                    var html = '';
-                    for (var i = 0; i < response.length; i++) {
-                        var item = response[i];
-                        html += '<div class="col-sm-6 col-md-4 col-lg-3 _item">'
-                        html +=                '<div class="vk-shop-item__wrapper">'
-                        html +=                    '<div class="vk-shop-item">'
-                        html +=                        '<div class="vk-img vk-img--mw100">'
-                        html +=                            '<a href="' + baseUrl + '/san-pham/' + item.productAlias + '.html" class="vk-img__link">'
-                        html +=                                '<img src="' + baseUrl + '/upload/product/' + item.productPhoto + '" alt="'+ item.productName +'" class="vk-img__img">'
-                        html +=                            '</a>'
-                        html +=                        '</div>'
-
-                        html +=                        '<div class="vk-shop-item__brief">'
-                        html +=                            '<h3 class="vk-shop-item__title"><a href="' + baseUrl + '/san-pham/' + item.productAlias + '.html" title="'+ item.productName +'">' + item.productName + '</a></h3>'
-                        html +=                            '<p class="vk-shop-item__price vk-text--red-1">' + item.productPrice.number_format() + ' đ</p>'
-                        html +=                        '</div>'
-                        html +=                    '</div> '
-                        html +=                '</div>'
-                        html +=            '</div>';
-                    }
-                    $('#append').html(html);
-                }
-            });
+            dataFiltered.sort = $(this).val();
+            dataFiltered.cate = '{{$product_cate->id}}';
+            filterProduct(dataFiltered);
         });
+
+        
     });
    
 </script>

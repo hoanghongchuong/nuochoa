@@ -52,6 +52,7 @@ class IndexController extends Controller {
 	public function index()
 	{
 		$banner_danhmuc = DB::table('lienket')->select()->where('status',1)->where('com','chuyen-muc')->where('link','index')->get()->first();
+		$banner_sidebar = DB::table('banner_content')->where('position',5)->get();
 		$tintuc_moinhat = DB::table('news')->select()->where('status',1)->where('com','tin-tuc')->orderBy('created_at','desc')->take(12)->get();
 		$com='index';
 		$hot_news = DB::table('news')->where('status',1)->where('noibat',1)->orderBy('created_at','desc')->first();
@@ -68,7 +69,7 @@ class IndexController extends Controller {
 		// End cấu hình SEO
 		$img_share = asset('upload/hinhanh/'.$setting->photo);
 
-		return view('templates.index_tpl', compact('banner_danhmuc','com','khonggian_list','about','tintuc_moinhat','keyword','description','title','img_share','hot_news','news_product','hot_product','slider'));
+		return view('templates.index_tpl', compact('banner_danhmuc','com','khonggian_list','about','tintuc_moinhat','keyword','description','title','img_share','hot_news','news_product','hot_product','slider','banner_sidebar'));
 	}
 	public function getProduct()
 	{
@@ -618,15 +619,22 @@ class IndexController extends Controller {
     	return view('templates.thuonghieu_tpl', compact('products','cate_pro','thuonghieus','thuonghieu'));
     }
     public function SapXep(Request $request){
-    	$sorts = $request->sort;
-    	$cateProduct = $request->cate;
     	$result = DB::table('products')
     			->join('product_categories','products.cate_id','=','product_categories.id')
-    			->select('products.id', 'products.name as productName','products.alias as productAlias','products.photo as productPhoto','products.price as productPrice')
-    			->where('products.cate_id',$cateProduct)
-    			->orderBy('products.id',$sorts)
-    			->get();
-    	return $result;
+    			->select('products.id', 'products.name as productName','products.alias as productAlias','products.photo as productPhoto','products.price as productPrice');
+
+    	if ($request->cate) {
+    		$result = $result->where('products.cate_id', $request->cate);
+    	}
+    	if ($request->price) {
+    		$result = $result->whereBetween('products.price', array(0, $request->price));
+    	}
+
+    	$result = $result->orderBy('products.id', $request->sort ? $request->sort : 'asc')->paginate(12);
+    	return response()->json([
+    		'paginator'  => (String) $result->render(),
+    		'data'		 => json_decode(json_encode($result))->data,
+    	]);
     }
 
 }
