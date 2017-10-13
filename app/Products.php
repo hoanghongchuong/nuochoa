@@ -13,7 +13,5 @@ class Products extends Model {
 	public function pimg(){
 		return $this->hasMany('App\Images','product_id');
 	}
-	public function getPriceAttribute(){
-		return number_format($this->price);
-	}
+	
 }
