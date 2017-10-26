@@ -255,7 +255,6 @@ Number.prototype.number_format = function(symbol, length) {
             filterProduct(dataFiltered);
         });
 
-        
     });
    
 </script>
